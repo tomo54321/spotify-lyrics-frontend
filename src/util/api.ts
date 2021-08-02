@@ -5,7 +5,7 @@ import { SingleLyric } from "../@types/lyric";
 import { APIClient } from "../App";
 
 export const API = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: process.env.REACT_APP_API,
     withCredentials: true
 })
 

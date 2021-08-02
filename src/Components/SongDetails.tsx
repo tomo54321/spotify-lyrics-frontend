@@ -1,20 +1,31 @@
 import React from "react";
+import { Artist } from "../@types/currentSong";
 
 interface SongDetailsProps {
     artwork: string;
+    songURL: string;
     name: string;
-    artist: string;
+    artists: Artist[];
 }
 export const SongDetails: React.FC<SongDetailsProps> = ({
     artwork,
     name,
-    artist
+    songURL,
+    artists
 }) => (
     <div className="details">
-        <img src={artwork} alt={`${name} - ${artist}`} />
+        <img src={artwork} alt={`${name} - ${artists[0].name}`} />
         <div>
-            <span className="song">{name}</span>
-            <span className="artist">{artist}</span>
+            <a href={songURL} target="_blank" rel="noopener noreferrer" className="song">{name}</a>
+            <div className="artists">
+                {artists.map((artist, index) => <a 
+                    href={artist.external_urls.spotify} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="artist"
+                >{artist.name}{index < (artists.length - 1) ? ", " : ""}</a>
+            )}
+            </div>
         </div>
     </div>
 )

@@ -29,7 +29,7 @@ export const Player = () => {
         cacheTime: 1000,
         refetchInterval: 1000,
         onSuccess(data) {
-            if(currentSongId.current !== data.item.id) {
+            if(data.item && currentSongId.current !== data.item.id) {
                 currentSongId.current = data.item.id;
                 currentLyrics.refetch();
 
@@ -45,7 +45,7 @@ export const Player = () => {
         }
     });
 
-    const currentLyrics = useQuery(["current-song-lyrics", currentlyPlaying.data?.item.artists[0].name, currentlyPlaying.data?.item.name ], ({ queryKey }) => {
+    const currentLyrics = useQuery(["current-song-lyrics", currentlyPlaying.data?.item?.artists[0].name, currentlyPlaying.data?.item?.name ], ({ queryKey }) => {
         const cancelToken = axios.CancelToken.source();
 
         // eslint-disable-next-line
@@ -78,7 +78,7 @@ export const Player = () => {
 
     if(currentlyPlaying.isLoading) { return <h1>Loading...</h1>}
 
-    if (!currentlyPlaying.data) {
+    if (!currentlyPlaying.data || !currentlyPlaying.data.item) {
         return (
             <div className="nothing-playing">
                 <span className="title">Nothing playing</span>
@@ -96,9 +96,10 @@ export const Player = () => {
             }
             {
                 currentlyPlaying.data.item ?
-                <SongDetails 
+                <SongDetails
+                    songURL={currentlyPlaying.data.item.external_urls.spotify}
                     name={currentlyPlaying.data.item.name}
-                    artist={currentlyPlaying.data.item.artists[0].name}
+                    artists={currentlyPlaying.data.item.artists}
                     artwork={currentlyPlaying.data.item.album.images[currentlyPlaying.data.item.album.images.length - 2].url}
                 />
                 : null
