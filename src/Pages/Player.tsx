@@ -1,9 +1,15 @@
 import axios from "axios";
+import FastAverageColor from "fast-average-color";
+import { useEffect } from "react";
 import { useRef } from "react";
 import { useQuery } from "react-query";
 import { Controls } from "../Components/Controls";
 import { Lyrics } from "../Components/Lyrics";
+import { LyricsStatus } from "../Components/LyricsStatus";
+import { SongDetails } from "../Components/SongDetails";
 import { getCurrentlyPlaying, getLyrics } from "../util/api";
+
+const fac = new FastAverageColor();
 
 export const Player = () => {
 
@@ -26,7 +32,16 @@ export const Player = () => {
             if(currentSongId.current !== data.item.id) {
                 currentSongId.current = data.item.id;
                 currentLyrics.refetch();
+
+                fac.getColorAsync(data.item.album.images[0].url)
+                .then(color => {
+                    document.body.style.backgroundColor = color.hex;
+                });
+
             }
+        },
+        onError() {
+            document.body.style.backgroundColor = "";
         }
     });
 
@@ -49,9 +64,16 @@ export const Player = () => {
 
     }, {
         enabled: currentlyPlaying.data !== undefined,
+        retry: false,
         cacheTime: Infinity,
         staleTime: Infinity
     });
+
+    useEffect(() => {
+        return () => {
+            document.body.style.backgroundColor = "";
+        }
+    }, []);
 
 
     if(currentlyPlaying.isLoading) { return <h1>Loading...</h1>}
@@ -70,6 +92,15 @@ export const Player = () => {
             {
                 currentLyrics.data ? 
                 <Lyrics lyrics={currentLyrics.data} currentTime={Math.floor(currentlyPlaying.data.progress_ms / 1000)}/>
+                : <LyricsStatus loading={currentLyrics.isLoading}/>
+            }
+            {
+                currentlyPlaying.data.item ?
+                <SongDetails 
+                    name={currentlyPlaying.data.item.name}
+                    artist={currentlyPlaying.data.item.artists[0].name}
+                    artwork={currentlyPlaying.data.item.album.images[currentlyPlaying.data.item.album.images.length - 2].url}
+                />
                 : null
             }
             <Controls playing={currentlyPlaying.data.is_playing}/>            

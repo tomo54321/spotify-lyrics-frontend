@@ -45,8 +45,8 @@ export const Lyrics: React.FC<{ lyrics: SingleLyric[]; currentTime: number; }> =
         <div 
             ref={ref => container.current = ref} 
             className={"lyrics-container" + (manualScroll ? " illuminate" : "")}
-            onMouseDown={() => setManualScroll(true)}
             onTouchMove={() => setManualScroll(true)}
+            onWheel={() => setManualScroll(true)}
         >
             {lyrics.map((lyric, index) => (
                 <div 
@@ -55,9 +55,14 @@ export const Lyrics: React.FC<{ lyrics: SingleLyric[]; currentTime: number; }> =
                     data-seconds={lyric.seconds}
                     onClick={() => {
                         seekTo(lyric.seconds * 1000);
+                        setManualScroll(false);
                     }}
                 >{lyric.lyrics}</div>
             ))}
+
+            {
+                manualScroll && <button className="reset-lyric-scroll" onClick={() => setManualScroll(false)}>Enable Auto Scrolling</button>
+            }
         </div>
     )
 

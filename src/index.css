@@ -16,6 +16,8 @@ body {
     color: #fff;
     height: 100vh;
     overflow: hidden;
+
+    transition: 3s ease background-color;
 }
 
 code {
@@ -54,16 +56,39 @@ main {
 }
 
 .player {
+    height: 100%;
     max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-.player .lyrics-container {
-    overflow: auto;
-}
 
+.player .lyrics-container {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+}
+.player .lyrics-container .message {
+    position: absolute;
+    height: 78px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+.player .lyrics-container h1 {
+    text-align: center;
+}
+.player .lyrics-container span {
+    display: block;
+    text-align: center;
+    opacity: .5;
+}
+.player .lyrics-container.illuminate {
+    position: relative;
+    z-index: 2;
+}
 .player .lyrics-container .lyric {
     margin: 4rem 30px;
     font-size: 2.5rem;
@@ -73,7 +98,9 @@ main {
     transition: 150ms ease opacity;
 }
 .player .lyrics-container .lyric.current,
-.player .lyrics-container.illuminate .lyric {
+.player .lyrics-container.illuminate .lyric,
+.player .lyrics-container .lyric.current:hover,
+.player .lyrics-container.illuminate .lyric:hover {
     opacity: 1;
 }
 .player .lyrics-container .lyric:hover {
@@ -82,17 +109,193 @@ main {
 .player .lyrics-container .lyric:first-of-type {
     margin-top: 25vh;
 }
+.player .lyrics-container .reset-lyric-scroll {
+    cursor: pointer;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #191414;
+    font-family: inherit;
+    font-size: 1.25rem;
+    border: 0;
+    color: #fff;
+    padding: 20px;
+    font-weight: 500;
+}
+.player .lyrics-container .reset-lyric-scroll::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-image: linear-gradient(transparent, #191414);
+    top: -100%;
+    left: 0;
+}
+
+.player .details {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+.player .details img {
+    display: block;
+    margin-right: 10px;
+    height: 64px;
+    width: 64px;
+}
+.player .details div{
+    overflow: hidden;
+}
+.player .details .song {
+    display: block;
+    font-size: 1.25rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.player .details .artist {
+    display: block;
+    font-size: .9rem;
+    opacity: .65;
+}
+.player .details::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-image: linear-gradient(transparent, #191414);
+    top: -100%;
+    left: 0;
+}
 
 .player .controls {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     align-items: center;
-    padding: 20px 30px;
+    padding: 10px 30px 20px 30px;
+}
+.player .controls .action {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+}
+.player .controls .action.skip {
+    opacity: .5;
+}
+.player .controls .action.play-state {
+    background-color: #fff;
+    color: #191414;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: auto;
+    box-shadow: 1px 1px 8px 0px #000;
+    cursor: pointer;
 }
 
 .legal {
     padding: 20px 10px;
     opacity: 0.8;
+    font-size: 12px;
+    display: block;
+    text-align: center;
     flex-shrink: 0;
+}
+
+@media screen and (min-width: 768px) {
+
+    .player .lyrics-container .lyric {
+        font-size: 4rem;
+        margin: 8rem 30px;
+    }
+
+    .player .details img {
+        width: 100px;
+        height: 100px;
+    }
+    .player .details .song {
+        font-size: 1.5rem;
+    }
+    .player .details .artist {
+        font-size: 1.25rem;
+    }
+
+    .legal {
+        text-align: left;
+    }
+}
+@media screen and (min-width: 1028px) {
+    .player {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        width: 100%;
+    }
+    .player .lyrics-container {
+        grid-column: 2;
+    }
+    .player .lyrics-container .message {
+        height: 200px;
+    }
+    .player .lyrics-container h1 {
+        font-size: 4rem;
+    }
+    .player .lyrics-container span {
+        font-size: 1.25rem;
+    }
+    .player .details {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .player .controls {
+        position: relative;
+        z-index: 5;
+        grid-column: 1;
+        grid-row: 1;
+        margin-top: 250px;
+    }
+    .legal {
+        text-align: left;
+    }
+}
+@media screen and (min-width: 1180px) {
+    .player {
+        grid-template-columns: 400px 1fr;
+        max-width: 1250px;
+        margin: auto;
+    }
+    .legal {
+        width: 100%;
+        max-width: 1250px;
+        margin: auto;
+    }
+}
+
+@media (max-height: 610px) and (max-width: 1027px) {
+
+    .player .lyrics-container .lyric {
+        font-size: 2rem;
+        margin: 2rem 30px;
+    }
+    .player .lyrics-container .lyric:first-of-type {
+        margin-top: 0px;
+    }
+    .player .details {
+        display: none;
+    }
+    .player .controls {
+        padding: 10px 30px;
+    }
+    .legal {
+        padding: 10px;
+    }
 }
