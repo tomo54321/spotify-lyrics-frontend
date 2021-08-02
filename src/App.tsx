@@ -1,25 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Player } from './Pages/Player';
+import { getCookie } from './util/cookies';
+
+export const APIClient = new QueryClient();
 
 function App() {
+
+  const isLoggedIn = getCookie("loggedIn") !== "";
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={APIClient}>
+      <div className="app">
+          { !isLoggedIn ? <a href="http://localhost:8000/auth/spotify">Login</a> : <Player />}
+
+        <small className="legal">This website is in no way affiliated or assosiated with Spotify.</small>
+      </div>
+    </QueryClientProvider>
   );
 }
 

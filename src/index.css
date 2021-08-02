@@ -1,13 +1,98 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing : antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    background-color: #1DB954;
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+#root {
+    height: 100%;
+}
+.app {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-image: linear-gradient(transparent 0%, #191414 30%);
+}
+main {
+    flex-grow: 1;
+}
+
+.nothing-playing {
+    padding: 40px 20px;
+}
+.nothing-playing .title{
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.nothing-playing .subtitle{
+    display: block;
+    text-align: center;
+    opacity: .7;
+    line-height: 1.3;
+}
+
+.player {
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.player .lyrics-container {
+    overflow: auto;
+}
+
+.player .lyrics-container .lyric {
+    margin: 4rem 30px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    opacity: .25;
+    cursor: pointer;
+    transition: 150ms ease opacity;
+}
+.player .lyrics-container .lyric.current,
+.player .lyrics-container.illuminate .lyric {
+    opacity: 1;
+}
+.player .lyrics-container .lyric:hover {
+    opacity: .5;
+}
+.player .lyrics-container .lyric:first-of-type {
+    margin-top: 25vh;
+}
+
+.player .controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.legal {
+    padding: 20px 10px;
+    opacity: 0.8;
+    flex-shrink: 0;
 }
